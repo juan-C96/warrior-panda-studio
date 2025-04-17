@@ -1,5 +1,6 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
+import { LanguageService } from 'src/app/services/language.service';
 
 @Component({
   selector: 'app-layout',
@@ -8,16 +9,15 @@ import { IonicModule } from '@ionic/angular';
   styleUrls: ['./layout.component.scss'],
   imports: [IonicModule],
 })
-export class LayoutComponent  implements OnInit {
+export class LayoutComponent {
 
-  @ViewChild('description', { static: false }) description!: ElementRef;
+  constructor(public langService: LanguageService) {}
 
-  scrollToDescription() {
-    this.description.nativeElement.scrollIntoView({ behavior: 'smooth' });
+  switchLang(lang: 'es' | 'en') {
+    this.langService.switchLang(lang);
   }
 
-  constructor() { }
-
-  ngOnInit() {}
-
+  t(key: string): string {
+    return this.langService.translate(key);
+  }
 }

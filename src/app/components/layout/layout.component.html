@@ -1,38 +1,44 @@
 <ion-content fullscreen>
-  <!-- Hero Section -->
   <div class="hero">
+    <!-- Botón de idioma dentro de la hero -->
+    <div class="lang-switcher">
+      <button
+        [class.active]="langService.lang === 'es'"
+        (click)="switchLang('es')"
+      >
+        ES
+      </button>
+      <button
+        [class.active]="langService.lang === 'en'"
+        (click)="switchLang('en')"
+      >
+        EN
+      </button>
+    </div>
+    
+
+    <!-- Imagen de fondo -->
     <img class="hero-image desktop" src="assets/images/logo1.png" alt="Portada escritorio" />
     <img class="hero-image mobile" src="assets/images/logo2.png" alt="Portada móvil" />
+
+    <!-- Texto y contenido -->
     <div class="hero-overlay">
-      <ion-icon
-        name="chevron-down-outline"
-        class="scroll-icon"
-        (click)="scrollToDescription()"
-      ></ion-icon>
+      <div class="coming-container">
+        <p>{{ t('preparing') }}</p>
+        <h2>{{ t('comingSoon') }}</h2>
+
+        <div class="social-links">
+          <a href="https://youtube.com/@WarriorPandaStudio" target="_blank" aria-label="YouTube">
+            <ion-icon name="logo-youtube"></ion-icon>
+          </a>
+          <a href="https://twitter.com/WarriorPandaSt" target="_blank" aria-label="Twitter / X">
+            <ion-icon name="logo-twitter"></ion-icon>
+          </a>
+          <a href="mailto:warriorpandastudio@gmail.com" aria-label="Email">
+            <ion-icon name="mail-outline"></ion-icon>
+          </a>
+        </div>
+      </div>
     </div>
-  </div>
-
-  <!-- Descripción -->
-  <div class="description" #description>
-    <h2>¿Quiénes somos?</h2>
-    <p>
-      En <strong>Warrior Panda Studio</strong>, creemos que los videojuegos no solo entretienen:
-      cuentan historias, despiertan emociones y conectan a las personas.
-    </p>
-
-    <p>
-      Nuestro equipo, con base en España, combina creatividad, técnica y pasión
-      para desarrollar títulos únicos. Apostamos por mecánicas inmersivas,
-      atmósferas intensas y mundos cargados de alma.
-    </p>
-
-    <p>
-      Ya sea un RPG por turnos, una aventura psicológica o un juego multijugador,
-      nuestro objetivo siempre es el mismo: que cuando juegues, lo sientas.
-    </p>
-
-    <p style="margin-top: var(--spacing-lg); font-weight: bold;">
-      ¡Bienvenido a nuestro universo!
-    </p>
   </div>
 </ion-content>
