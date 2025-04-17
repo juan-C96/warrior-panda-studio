@@ -1,0 +1,8 @@
+{
+  "name": "WarriorPandaStudio",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular",
+  "id": "6e0dee1b"
+}
