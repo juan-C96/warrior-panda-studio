@@ -29,7 +29,7 @@ log.txt
 /out-tsc
 /bazel-out
 www/
-
+.deploy-temp/
 
 # Node
 /node_modules

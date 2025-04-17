@@ -1,48 +1,49 @@
 # ================================
-# Warrior Panda Studio - Deploy Script (PowerShell Pro)
+# Warrior Panda Studio - Deploy Script (Seguro)
 # ================================
 
-# 1. Detectar rama actual
-$originalBranch = git rev-parse --abbrev-ref HEAD
-Write-Host "Rama actual: $originalBranch"
+# 1. Variables
+$deployDir = ".deploy-temp"
+$repoUrl = "https://github.com/juan-C96/warrior-panda-studio.git"
+$deployBranch = "gh-pages"
+$customDomain = "warriorpandastudio.com"
 
-# 2. Generar build
+# 2. Generar el build
 Write-Host "Generando build de producción..."
 npm run build
 
-# 3. Verificar carpeta 'www'
+# 3. Verificar el build
 if (!(Test-Path -Path "./www/index.html")) {
-    Write-Error "La carpeta 'www' no fue generada. Asegúrate de tener 'outputPath': 'www' en angular.json"
-    exit
+    Write-Error "La carpeta 'www' no fue generada. Verifica tu build."
+    exit 1
 }
 
 # 4. Crear archivo CNAME
-Write-Host "Generando archivo CNAME para www.warriorpandastudio.com..."
-Set-Content -Path "www/CNAME" -Value "www.warriorpandastudio.com"
+Write-Host "Agregando archivo CNAME..."
+Set-Content -Path "www/CNAME" -Value $customDomain
 
-# 5. Crear rama gh-pages (sin historial)
-Write-Host "Cambiando a rama gh-pages temporal..."
-git checkout --orphan gh-pages
+# 5. Preparar carpeta temporal
+Write-Host "Preparando carpeta temporal para deploy..."
+if (Test-Path $deployDir) {
+    Remove-Item -Recurse -Force $deployDir
+}
+New-Item -ItemType Directory -Path $deployDir | Out-Null
+Copy-Item -Recurse -Force ./www/* $deployDir
 
-# 6. Eliminar todo lo que no sea la carpeta de build
-Get-ChildItem -Exclude www -Force | Remove-Item -Force -Recurse
+# 6. Inicializar repo temporal
+Set-Location $deployDir
+git init
+git remote add origin $repoUrl
+git checkout -b $deployBranch
+git add .
+git commit -m "Deploy seguro"
+git push origin $deployBranch --force
+Set-Location ..
 
-# 7. Commit del build
-Write-Host "Añadiendo archivos del build..."
-git --work-tree www add --all
-git --work-tree www commit -m "Deploy"
-
-# 8. Push forzado
-Write-Host "Subiendo a GitHub..."
-git push origin HEAD:gh-pages --force
-
-# 9. Volver a la rama original
-Write-Host "Volviendo a la rama $originalBranch..."
-git checkout $originalBranch
-
-# 10. Limpiar carpeta de build local
-Write-Host "Limpiando carpeta de build local..."
+# 7. Limpiar carpetas temporales
+Remove-Item -Recurse -Force $deployDir
 Remove-Item -Recurse -Force ./www
 
-Write-Host "Deploy completo. Tu web estará disponible pronto en:"
-Write-Host "https://www.warriorpandastudio.com"
+# 8. Fin
+Write-Host "Deploy completado correctamente."
+Write-Host "Tu sitio estará disponible en: https://$customDomain"
