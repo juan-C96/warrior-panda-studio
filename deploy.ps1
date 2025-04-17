@@ -28,6 +28,9 @@ git push origin HEAD:gh-pages --force
 Write-Host "Volviendo a la rama main..."
 git checkout main
 
+Write-Host "Limpiando carpeta de build local..."
+Remove-Item -Recurse -Force ./www
+
 Write-Host "Deploy completo. Tu web estará disponible pronto en:"
 Write-Host "https://www.warriorpandastudio.com"
 
